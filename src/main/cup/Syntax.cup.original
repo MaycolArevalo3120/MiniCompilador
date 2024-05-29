@@ -1,0 +1,22 @@
+package umg.compiladores;
+
+import java_cup.runtime.*;
+
+terminal PUNTO_Y_COMA, SUMA, RESTA, MULTIPLICACION, PARENTESIS_ABRE, PARENTESIS_CIERRA, NUMERO;
+non terminal expr_list, expr;
+
+precedence left SUMA, RESTA;
+precedence left MULTIPLICACION;
+
+start with expr_list;
+
+expr_list   ::= expr_list expr PUNTO_Y_COMA
+              | expr PUNTO_Y_COMA
+;
+
+expr        ::= expr SUMA expr
+              | expr RESTA expr
+              | expr MULTIPLICACION expr
+              | PARENTESIS_ABRE expr PARENTESIS_CIERRA
+              | NUMERO
+;

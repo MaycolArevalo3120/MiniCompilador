@@ -1,0 +1,57 @@
+package umg.compiladores;
+
+import java_cup.runtime.*;
+
+/* Definición de los tokens */
+terminal int ENTERO;
+terminal float FLOTANTE;
+terminal char CARACTER;
+terminal String IDENTIFICADOR;
+terminal String PUNTOYCOMA;
+terminal String IGUAL;
+terminal int NUMERO_ENTERO;
+terminal float NUMERO_FLOTANTE; // Nuevo terminal para números flotantes
+terminal String SUMA; // Terminal para la suma
+
+/* Definición de las producciones */
+non terminal programa;
+non terminal declaracion;
+non terminal tipo;
+non terminal identificador;
+non terminal asignacion;
+non terminal Object expresion; // Producción para expresiones aritméticas que puede ser int o float
+
+
+precedence left PUNTOYCOMA;
+precedence left SUMA; // Definir precedencia para la suma
+
+start with programa;
+
+programa ::= declaracion PUNTOYCOMA
+           | asignacion PUNTOYCOMA
+           | expresion PUNTOYCOMA // Agregar expresiones al programa
+           | declaracion PUNTOYCOMA programa
+           | asignacion PUNTOYCOMA programa
+           | expresion PUNTOYCOMA programa // Agregar expresiones al programa
+           ;
+
+declaracion ::= tipo identificador
+              ;
+
+asignacion ::= tipo identificador IGUAL NUMERO_ENTERO
+             | identificador IGUAL NUMERO_ENTERO
+             | tipo identificador IGUAL NUMERO_FLOTANTE
+             | identificador IGUAL NUMERO_FLOTANTE
+             ;
+
+tipo ::= ENTERO
+       | FLOTANTE
+       | CARACTER
+       ;
+
+expresion ::= expresion SUMA expresion
+           | NUMERO_ENTERO
+           | NUMERO_FLOTANTE
+           | IDENTIFICADOR
+           | IDENTIFICADOR SUMA IDENTIFICADOR // Ajuste para permitir expresiones como "x + y"
+           ;
